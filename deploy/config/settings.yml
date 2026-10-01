@@ -1,0 +1,90 @@
+# Настройки бота. После правки: в боте команда /reload (или `vpn restart bot`).
+
+# Пробный период — один раз на один Telegram-аккаунт
+trial:
+  enabled: true
+  hours: 24
+
+# Лимит устройств на обычную подписку (0 = без лимита)
+device_limit: 3
+# Запас по IP сверх лимита устройств: телефон при смене Wi-Fi/мобильной сети
+# ненадолго светится с двух адресов. 1 = лимит 3 устройства → блок на 5-м одновременном IP.
+ip_limit_extra: 1
+# Лимит трафика на обычную подписку, ГБ (0 = без лимита)
+traffic_limit_gb: 0
+
+# Тарифы. stars — цена в Telegram Stars, rub — цена в рублях для оплаты криптовалютой
+# (CryptoBot сам пересчитает в USDT/TON по курсу). code не менять у существующих тарифов.
+plans:
+  - code: m1
+    title: "1 месяц"
+    days: 30
+    stars: 149
+    rub: 199
+  - code: m3
+    title: "3 месяца"
+    days: 90
+    stars: 399
+    rub: 529
+    badge: "−10%"
+  - code: m12
+    title: "12 месяцев"
+    days: 365
+    stars: 1299
+    rub: 1790
+    badge: "−25%"
+
+payments:
+  stars: true
+  cryptobot: true          # работает, только если в .env задан CRYPTOPAY_TOKEN
+  cryptobot_assets: "USDT,TON"
+  # Тестовый режим: для админов все тарифы стоят 1 ⭐ / 10 ₽ — проверить полный цикл оплаты.
+  test_mode: false
+
+# Напоминания перед окончанием доступа (за сколько часов)
+reminders:
+  paid_hours_before: [24, 3]
+  trial_hours_before: [3]
+
+# Рефералы: друг по приглашению получает пробный период подольше,
+# пригласивший — +bonus_days после ПЕРВОЙ оплаты друга (защита от накрутки).
+referral:
+  enabled: true
+  friend_trial_hours: 72
+  bonus_days: 7
+
+# Когда убираете человека из белого списка с вариантом «на обычные условия» —
+# сколько дней доступа у него остаётся, чтобы успеть оплатить.
+unwhitelist_grace_days: 3
+
+# Кнопка «Написать в поддержку»
+support: true
+
+# Приложения для инструкций «Как подключить» (проверено 02.10.2026).
+# В российском App Store официальных клиентов сейчас нет (удалены в марте 2026),
+# поэтому для iPhone даём App Store другой страны + TestFlight.
+apps:
+  ios:
+    name: "Happ"
+    url: "https://apps.apple.com/us/app/happ-proxy-utility/id6504287215"
+    extra_name: "Happ через TestFlight"
+    extra_url: "https://testflight.apple.com/join/ystvnbsP"
+    alt_name: "Streisand"
+    alt_url: "https://apps.apple.com/us/app/streisand/id6450534064"
+  android:
+    name: "Happ"
+    url: "https://play.google.com/store/apps/details?id=com.happproxy"
+    extra_name: "Happ — файл .apk"
+    extra_url: "https://github.com/Happ-proxy/happ-android/releases/latest/download/Happ.apk"
+    alt_name: "v2RayTun"
+    alt_url: "https://play.google.com/store/apps/details?id=com.v2raytun.android"
+  windows:
+    name: "Happ"
+    url: "https://github.com/Happ-proxy/happ-desktop/releases/latest/download/setup-Happ.x64.exe"
+    alt_name: "Hiddify"
+    alt_url: "https://github.com/hiddify/hiddify-app/releases/latest"
+  macos:
+    name: "Happ"
+    url: "https://github.com/Happ-proxy/happ-desktop/releases/latest/download/Happ.macOS.universal.dmg"
+    alt_name: "Hiddify"
+    alt_url: "https://github.com/hiddify/hiddify-app/releases/latest"

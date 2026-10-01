@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Быстрые команды обслуживания. Установлен в /usr/local/bin/vpn
+cd /opt/vpn
+case "${1:-help}" in
+  status)
+    docker ps -a --format 'table {{.Names}}\t{{.Status}}'
+    echo; echo "Порты:"; ss -tlnp | grep -E ':(443|2096) ' | awk '{print "  "$4}'
+    set -a; . ./.env; set +a
+    curl -s -m 5 -H "Authorization: Bearer $XUI_API_TOKEN" "http://127.0.0.1:$XUI_PORT${XUI_BASE_PATH}panel/api/server/status" \
+      | python3 -c 'import json,sys;o=json.load(sys.stdin)["obj"];x=o.get("xray",{});print("Xray:",x.get("state"),x.get("version"),"| CPU %.0f%%"%o.get("cpu",0),"| RAM %.0f%%"%(100*o["mem"]["current"]/o["mem"]["total"]),"| диск %.0f%%"%(100*o["disk"]["current"]/o["disk"]["total"]))' \
+      || echo "3x-ui API НЕ ОТВЕЧАЕТ"
+    echo "Последний бэкап: $(ls -t backups/vpn-*.enc 2>/dev/null | head -1)"
+    ;;
+  logs)    docker logs --tail "${3:-100}" -f "$( [ "${2:-bot}" = xui ] && echo 3xui || echo vpn-bot )" ;;
+  errors)  docker logs vpn-bot 2>&1 | grep -E "ERROR|Traceback" | tail -30 ;;
+  restart) docker compose restart ${2:-} ;;
+  backup)  /opt/vpn/scripts/backup.sh ;;
+  restore) /opt/vpn/scripts/restore.sh "${@:2}" ;;
+  update-bot) docker compose up -d --build bot && docker logs --tail 20 vpn-bot ;;
+  update-xui)
+    [ -n "${2:-}" ] || { echo "Использование: vpn update-xui v3.9.0  (версии: github.com/MHSanaei/3x-ui/releases)"; exit 1; }
+    /opt/vpn/scripts/backup.sh --no-send
+    sed -i -E "s#(ghcr.io/mhsanaei/3x-ui:)[^[:space:]]+#\1$2#" docker-compose.yml
+    docker compose pull 3xui && docker compose up -d 3xui && sleep 8 && vpn status ;;
+  panel)
+    set -a; . ./.env; set +a
+    echo "1) На своём компьютере выполните:"
+    echo "   ssh -i ~/.ssh/id_rsa -N -L 8443:127.0.0.1:$XUI_PORT root@$(curl -s -4 -m 5 ifconfig.me)"
+    echo "2) Откройте в браузере: http://127.0.0.1:8443${XUI_BASE_PATH}"
+    echo "   Логин: $XUI_USERNAME   Пароль: в /opt/vpn/.env (XUI_PASSWORD)" ;;
+  *) echo "vpn status | logs [bot|xui] | errors | restart [bot|3xui] | backup | restore ФАЙЛ | update-bot | update-xui ВЕРСИЯ | panel" ;;
+esac
