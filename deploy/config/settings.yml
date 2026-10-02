@@ -61,16 +61,16 @@ unwhitelist_grace_days: 3
 support: true
 
 # Приложения для инструкций «Как подключить» (проверено 02.10.2026).
-# В российском App Store официальных клиентов сейчас нет (удалены в марте 2026),
-# поэтому для iPhone даём App Store другой страны + TestFlight.
+# Happ, v2RayTun, Streisand, V2Box удалены из российского App Store (март 2026), там их подделки.
+# incy и Shadowrocket — настоящие и есть в российском App Store. v2RayTun на iOS у нас не заработал.
 apps:
   ios:
-    name: "Happ"
-    url: "https://apps.apple.com/us/app/happ-proxy-utility/id6504287215"
+    name: "incy"
+    url: "https://apps.apple.com/ru/app/incy/id6756943388"
     extra_name: "Happ через TestFlight"
     extra_url: "https://testflight.apple.com/join/ystvnbsP"
-    alt_name: "Streisand"
-    alt_url: "https://apps.apple.com/us/app/streisand/id6450534064"
+    alt_name: "Shadowrocket (249 ₽)"
+    alt_url: "https://apps.apple.com/ru/app/shadowrocket/id932747118"
   android:
     name: "Happ"
     url: "https://play.google.com/store/apps/details?id=com.happproxy"
@@ -84,7 +84,7 @@ apps:
     alt_name: "Hiddify"
     alt_url: "https://github.com/hiddify/hiddify-app/releases/latest"
   macos:
-    name: "Happ"
-    url: "https://github.com/Happ-proxy/happ-desktop/releases/latest/download/Happ.macOS.universal.dmg"
-    alt_name: "Hiddify"
-    alt_url: "https://github.com/hiddify/hiddify-app/releases/latest"
+    name: "incy"
+    url: "https://apps.apple.com/ru/app/incy/id6756943388"
+    alt_name: "Happ"
+    alt_url: "https://github.com/Happ-proxy/happ-desktop/releases/latest/download/Happ.macOS.universal.dmg"
